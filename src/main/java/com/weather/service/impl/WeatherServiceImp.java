@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -18,7 +20,8 @@ import com.weather.service.WeatherService;
 
 @Service("weatherService")
 public class WeatherServiceImp implements WeatherService {
-
+	private Logger log =  LoggerFactory.getLogger(WeatherServiceImp.class);
+	
 	@Override
 	public List<WeatherBean> getWeather(String[] cityArray) {
 		// TODO Auto-generated method stub
@@ -26,7 +29,8 @@ public class WeatherServiceImp implements WeatherService {
 		List<WeatherBean> weatherBeanList = new ArrayList<>();
 		for(String city: cityArray){
 			url = makeupURL(city);
-			RestTemplate restTemplate = new RestTemplate(getClientHttpRequestFactory());
+			log.debug(" URL is "+ url);
+			RestTemplate restTemplate = new RestTemplate();
 			ResponseEntity<String> response = 
 					  restTemplate.getForEntity(url , String.class);
 			WeatherBean weatherBean = convertoWeatherBean(response);
@@ -62,19 +66,22 @@ public class WeatherServiceImp implements WeatherService {
 			try {
 				root = mapper.readTree(response.getBody());
 				JsonNode city = root.path("name");
-				System.out.println("name is "+ city.asText());
+				log.debug("name is "+ city.asText());
 				weatherBean.setCity(city.asText());
 				
 				JsonNode weather = root.path("weather");
 				 for( JsonNode weatherMain : weather){
+					 log.debug("weather is "+weatherMain.path("main").asText());
 					 weatherBean.setWeather(weatherMain.path("main").asText());
 				 }
 				 
 				 JsonNode mainNode = root.path("main");
-				 weatherBean.setTemperature(mainNode.floatValue());
+				 log.debug("weather is "+mainNode.path("temp").floatValue());
+				 weatherBean.setTemperature(mainNode.path("temp").floatValue());
 				 
 				 JsonNode windNode = root.path("wind");
-				 weatherBean.setWind(windNode.floatValue());
+				 log.debug("weather is "+windNode.path("speed").floatValue());
+				 weatherBean.setWind(windNode.path("speed").floatValue());
 				 
 				 Calendar cal = Calendar.getInstance();
 				 weatherBean.setUpdatedTime(cal);
