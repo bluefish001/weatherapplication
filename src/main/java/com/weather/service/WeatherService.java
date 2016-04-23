@@ -6,6 +6,6 @@ import com.weather.bean.WeatherBean;
 
 public interface WeatherService {
 	
-	public List<WeatherBean> getWeather(List<String> cityList, String url);
+	public List<WeatherBean> getWeather(String[] cityArray);
 	
 }

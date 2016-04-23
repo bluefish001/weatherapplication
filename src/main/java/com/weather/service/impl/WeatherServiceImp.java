@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -15,14 +16,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.weather.bean.WeatherBean;
 import com.weather.service.WeatherService;
 
+@Service("weatherService")
 public class WeatherServiceImp implements WeatherService {
 
 	@Override
-	public List<WeatherBean> getWeather(List<String> cityList, String url) {
+	public List<WeatherBean> getWeather(String[] cityArray) {
 		// TODO Auto-generated method stub
+		String url;
 		List<WeatherBean> weatherBeanList = new ArrayList<>();
-		for(String city: cityList){
-			url = url + city;
+		for(String city: cityArray){
+			url = makeupURL(city);
 			RestTemplate restTemplate = new RestTemplate(getClientHttpRequestFactory());
 			ResponseEntity<String> response = 
 					  restTemplate.getForEntity(url , String.class);
@@ -31,6 +34,14 @@ public class WeatherServiceImp implements WeatherService {
 			
 		}
 		return weatherBeanList;
+	}
+	
+	//create new url based on city
+	private String makeupURL(String city){
+		String url = "http://api.openweathermap.org/data/2.5/weather?q=";
+		String appId = "&appid=b4b2821d80b375a7300dff17f1e7daba";
+		String finalUrl = url+city+appId;
+		return finalUrl;
 	}
 	
 	//time out
@@ -42,6 +53,7 @@ public class WeatherServiceImp implements WeatherService {
 		return clientHttpRequestFactory;
 		}
 	
+	//retrieve the JSON data and convert to weather bean
 	private WeatherBean convertoWeatherBean(ResponseEntity<String>response){
 		WeatherBean weatherBean = new WeatherBean();
 		 ObjectMapper mapper = new ObjectMapper();
