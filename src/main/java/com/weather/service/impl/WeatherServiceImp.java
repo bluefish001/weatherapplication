@@ -8,8 +8,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySources;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -24,6 +30,14 @@ import com.weather.service.WeatherService;
 @Service("weatherService")
 public class WeatherServiceImp implements WeatherService {
 	private Logger log =  LoggerFactory.getLogger(WeatherServiceImp.class);
+	
+	@Configuration
+	@PropertySources(value = {@PropertySource("classpath:application.properties")})
+    static class DefaultProperties
+    {}
+
+    @Resource
+    private Environment env;
 	
 	@Override
 	public List<WeatherBean> getWeather(String[] cityArray) {
@@ -45,9 +59,12 @@ public class WeatherServiceImp implements WeatherService {
 	
 	//create new url based on city
 	private String makeupURL(String city){
-		String url = "http://api.openweathermap.org/data/2.5/weather?q=";
-		String appId = "&appid=b4b2821d80b375a7300dff17f1e7daba";
-		String finalUrl = url+city+appId;
+		String url = env.getRequiredProperty("weather.url");
+		String appId = env.getRequiredProperty("weather.appid");
+//		String url = "http://api.openweathermap.org/data/2.5/weather?q=";
+//		String appId = "&appid=b4b2821d80b375a7300dff17f1e7daba";
+		String finalUrl = url+city+"&appid="+appId;
+		log.debug("url is "+ finalUrl);
 		return finalUrl;
 	}
 	

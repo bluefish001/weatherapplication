@@ -8,9 +8,11 @@
   <name>weatherapplication Maven Webapp</name>
   <url>http://maven.apache.org</url>
   <properties>
-        <springframework.version>4.2.0.RELEASE</springframework.version>
+        <springframework.version>4.2.1.RELEASE</springframework.version>
         <jackson.version>2.5.3</jackson.version>
         <jdk.version>1.7</jdk.version>
+        <testng.version>6.9.6</testng.version>
+        <mockito.version>1.10.19</mockito.version>
     </properties>
  
     <dependencies>
@@ -66,8 +68,34 @@
 			<artifactId>janino</artifactId>
 			<version>2.7.8</version>
 		</dependency>
-    </dependencies>
+		
+		<!-- Testing dependencies -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${springframework.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
     
+    </dependencies>  
     
   <build>
     <finalName>weatherapplication</finalName>
