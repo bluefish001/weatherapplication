@@ -1,10 +1,8 @@
 package com.weather.bean;
 
-import java.util.Calendar;
-
 public class WeatherBean {
 	private String city;
-	private Calendar updatedTime;
+	private String updatedTime;
 	private String weather;
 	private float temperature;
 	private float wind;
@@ -15,10 +13,10 @@ public class WeatherBean {
 	public void setCity(String city) {
 		this.city = city;
 	}
-	public Calendar getUpdatedTime() {
+	public String getUpdatedTime() {
 		return updatedTime;
 	}
-	public void setUpdatedTime(Calendar updatedTime) {
+	public void setUpdatedTime(String updatedTime) {
 		this.updatedTime = updatedTime;
 	}
 	public String getWeather() {

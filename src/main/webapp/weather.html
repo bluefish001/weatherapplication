@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<body>
+
+<div ng-app="myApp" ng-controller="myCtrl"> 
+
+<p>Today's Weather is:</p>
+
+<select ng-model="city" ng-dropdown required ng-change="changeme();" ng-dropdown required>
+    <option value="Sydney">Sydney</option>
+    <option value="Melbourne">Melbourne</option>
+	<option value="Wollongong">Wollongong</option>
+</select>
+
+<div id="a" ng-if="city == 'Sydney' ||'Melbourne' ||'Wollongong'">
+<table class="table table-hover" ng-repeat="u in myCity">
+
+                          <tr>
+                              <td>City</td><td><span>{{u.city}}</span></td>
+                              
+                          </tr>
+						<tr>
+						<td>Time</td><td><span>{{u.updatedTime}}</span></td>                            
+						</tr>
+						
+						<tr>
+						 <td>Weather</td> <td><span>{{u.weather}}</span></td>
+						</tr>
+						
+						<tr>
+						 <td>Tempe</td> <td><span>{{u.temperature-273.16 | number : 2}}  °C</span></td>
+						</tr>
+                         
+                         <tr>
+						 <td>Wind</td> <td><span>{{u.wind}} km/h</span></td>
+						</tr>
+                  </table></div>
+
+</div>
+
+<p>The $http service requests a page on the server</p>
+
+<script>
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope, $http) {
+  $scope.changeme = function() {
+  $http.get("http://localhost:8080/weatherapplication/rest/getweather?cities="+$scope.city)
+  .then(function(response) {
+      $scope.myCity = response.data;
+  });
+  }
+});
+</script>
+
+</body>
+</html>

@@ -1,8 +1,11 @@
 package com.weather.service.impl;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -83,8 +86,10 @@ public class WeatherServiceImp implements WeatherService {
 				 log.debug("weather is "+windNode.path("speed").floatValue());
 				 weatherBean.setWind(windNode.path("speed").floatValue());
 				 
-				 Calendar cal = Calendar.getInstance();
-				 weatherBean.setUpdatedTime(cal);
+								 
+				 Date now = new Date();
+				 SimpleDateFormat sdf = new SimpleDateFormat("EEEE 'at' hh:mm a ");
+				 weatherBean.setUpdatedTime(sdf.format(now));
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
