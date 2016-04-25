@@ -17,12 +17,12 @@ import com.weather.service.WeatherService;
 
 
 @Controller
-public class weatherController {
+public class WeatherController {
 
 	@Autowired
 	WeatherService weatherService;
 	
-	private Logger log = LoggerFactory.getLogger(weatherController.class);
+	private Logger log = LoggerFactory.getLogger(WeatherController.class);
 	
 	@RequestMapping(value="/getweather", method = RequestMethod.GET)
 	public ResponseEntity<List<WeatherBean>> getWeather(@RequestParam(required = false, value = "cities") String cities){
